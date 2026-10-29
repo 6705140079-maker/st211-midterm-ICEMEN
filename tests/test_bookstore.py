@@ -175,7 +175,8 @@ def test_regression_login_preserves_special_characters():
     assert u.login("alice", "p@ss!123") is True
     assert u.login("alice", "pass123") is False
 
-    # =========================================================
+
+# =========================================================
 # Nyan Moe Aung - 6705140058 - NyanMoeAung-6705140058
 # =========================================================
 
