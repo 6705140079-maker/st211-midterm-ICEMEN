@@ -144,3 +144,33 @@ def test_slow_large_catalog_search():
     for _ in range(50):
         result = cat.search("Software Engineering Book 29999")
         assert result == [29999]
+
+
+# =========================================================
+# Thet Htoo San - 6705140080 - 6705140080-thomas
+# =========================================================
+
+@pytest.mark.smoke
+def test_smoke_add_item_reaches_cart():
+    """Author: Thet Htoo San (6705140080-thomas). Smoke: adding a known product places it in the cart."""
+    cat = Catalog()
+    cat.add_product(202, "Pytest Essentials", 30)
+
+    cart = Cart(cat)
+
+    assert cart.add(202) is True
+    assert 202 in cart.items
+
+
+@pytest.mark.regression
+def test_regression_login_preserves_special_characters():
+    """Author: Thet Htoo San (6705140080-thomas).
+    Function: Users.login().
+    Wrong behaviour: special characters are removed from the supplied password.
+    Correct behaviour: login must compare the exact password string.
+    """
+    u = Users()
+    u.register("alice", "p@ss!123")
+
+    assert u.login("alice", "p@ss!123") is True
+    assert u.login("alice", "pass123") is False
