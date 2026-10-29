@@ -57,10 +57,10 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 
 ## Bug 5
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+- **Module / function:** catalog.py -> search()
+- **What we suspected and why:** search() compares the keyword directly with the product title, so the comparison appears to be case-sensitive.
+- **What we did:** Added a product titled Python Testing and searched using the lowercase keyword `python`.
+- **What we observed (the wrong result):** The search returned an empty list `[]`.
+- **What we expected instead:** The search should return [1] because python should match Python Testing regardless of letter case.
+- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **Author of this finding:** Nyan Moe Aung
