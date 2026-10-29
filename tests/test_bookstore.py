@@ -1,4 +1,5 @@
 """Your test suite. Write smoke, regression, and slow tests here.
+
 Every test MUST carry a marker (@pytest.mark.smoke / regression / slow)
 and name its author in the docstring.
 """
@@ -6,6 +7,10 @@ and name its author in the docstring.
 import pytest
 from bookstore_app import Users, Catalog, Cart
 
+
+# =========================================================
+# Aung Zay Oo - 6705140079 - 6705140079-maker
+# =========================================================
 
 @pytest.mark.smoke
 def test_smoke_user_registration():
@@ -46,3 +51,47 @@ def test_regression_register_rejects_empty_credentials():
 
     assert u.register("", "validpass") is False
     assert u.register("validuser", "") is False
+
+
+# =========================================================
+# Thet Naing Tun - 6705140062 - ThetNH
+# =========================================================
+
+@pytest.mark.smoke
+def test_smoke_login_validates_password():
+    """Author: Thet Naing Tun (ThetNH). Smoke: login accepts the correct password and rejects an incorrect password."""
+    u = Users()
+    u.register("thetnaing", "pass1234")
+
+    assert u.login("thetnaing", "pass1234") is True
+    assert u.login("thetnaing", "wrongpass") is False
+
+
+@pytest.mark.regression
+def test_regression_checkout_empty_cart_returns_none():
+    """Author: Thet Naing Tun (ThetNH).
+    Function: Cart.checkout().
+    Wrong behaviour: checking out an empty cart returns [] and records an empty order.
+    Correct behaviour: it should return None and should not record an order.
+    """
+    cart = Cart(Catalog())
+
+    assert cart.checkout() is None
+    assert cart.history() == []
+
+
+@pytest.mark.slow
+def test_slow_bulk_import_50000_products():
+    """Author: Thet Naing Tun (ThetNH). Slow: imports 50,000 products and verifies the resulting catalog."""
+    cat = Catalog()
+    cart = Cart(cat)
+
+    products = [
+        (i, f"Book {i}", 10)
+        for i in range(50_000)
+    ]
+
+    cart.import_products(products)
+
+    assert len(cat.products) == 50_000
+    assert cat.products[49_999]["title"] == "Book 49999"
