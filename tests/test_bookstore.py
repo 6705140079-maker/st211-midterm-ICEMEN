@@ -6,6 +6,10 @@ and name its author in the docstring.
 import pytest
 from bookstore_app import Users, Catalog, Cart
 
+# =========================================================
+# Aung Zay Oo - 6705140079 - 6705140079-maker
+# =========================================================
+
 
 @pytest.mark.smoke
 def test_smoke_user_registration():
