@@ -45,13 +45,13 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 
 ## Bug 4
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+- **Module / function:** users.py -> login()
+- **What we suspected and why:** login() removes special characters from the password before comparing it with the stored password, so valid passwords containing symbols may not work correctly.
+- **What we did:** Registered a user with the password p@ss!123 and then attempted to log in using that exact password.
+- **What we observed (the wrong result):** Login returned False even though the exact registered password was supplied.
+- **What we expected instead:** Login should return True when the supplied password exactly matches the stored password, including special characters.
+- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **Author of this finding:** Thet Htoo San
 
 ---
 
