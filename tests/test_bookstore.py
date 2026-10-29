@@ -174,3 +174,35 @@ def test_regression_login_preserves_special_characters():
 
     assert u.login("alice", "p@ss!123") is True
     assert u.login("alice", "pass123") is False
+
+    # =========================================================
+# Nyan Moe Aung - 6705140058 - NyanMoeAung-6705140058
+# =========================================================
+
+@pytest.mark.smoke
+def test_smoke_checkout_non_empty_cart():
+    """Author: Nyan Moe Aung (NyanMoeAung-6705140058). Smoke: checkout returns and records a non-empty order."""
+    cat = Catalog()
+    cat.add_product(303, "Clean Code", 50)
+
+    cart = Cart(cat)
+    cart.add(303)
+
+    order = cart.checkout()
+
+    assert order == [303]
+    assert cart.items == []
+    assert cart.history() == [[303]]
+
+
+@pytest.mark.regression
+def test_regression_search_is_case_insensitive():
+    """Author: Nyan Moe Aung (NyanMoeAung-6705140058).
+    Function: Catalog.search().
+    Wrong behaviour: lowercase searches do not match titles containing uppercase letters.
+    Correct behaviour: matching should be case-insensitive.
+    """
+    cat = Catalog()
+    cat.add_product(1, "Python Testing", 30)
+
+    assert cat.search("python") == [1]
