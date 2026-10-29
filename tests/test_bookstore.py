@@ -95,3 +95,41 @@ def test_slow_bulk_import_50000_products():
 
     assert len(cat.products) == 50_000
     assert cat.products[49_999]["title"] == "Book 49999"
+
+
+   @pytest.mark.smoke
+def test_smoke_add_product_saves_to_catalog():
+    """Author: Aung Khant Ko (6705140063-wq). Smoke: adding a product stores it in the catalog."""
+    cat = Catalog()
+    cat.add_product(101, "Software Testing Guide", 45)
+    assert 101 in cat.products
+    assert cat.products[101]["title"] == "Software Testing Guide"
+    assert cat.search("Software") == [101]
+
+@pytest.mark.regression
+def test_regression_import_products_returns_exact_count():
+    """Author: Aung Khant Ko (6705140063-wq).
+    Function: Cart.import_products().
+    Wrong behaviour: importing two products returns 3.
+    Correct behaviour: the returned count must equal the number actually imported.
+    """
+    cart = Cart(Catalog())
+    count = cart.import_products([
+        (1, "Book 1", 10),
+        (2, "Book 2", 15),
+    ])
+    assert count == 2
+
+@pytest.mark.slow
+def test_slow_large_catalog_search():
+    """Author: Aung Khant Ko (6705140063-wq). Slow: imports a large catalog and repeatedly searches it."""
+    cat = Catalog()
+    cart = Cart(cat)
+    products = [
+        (i, f"Software Engineering Book {i}", 10)
+        for i in range(30_000)
+    ]
+    cart.import_products(products)
+    for _ in range(50):
+        result = cat.search("Software Engineering Book 29999")
+        assert result == [29999]

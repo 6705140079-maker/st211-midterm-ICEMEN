@@ -33,13 +33,13 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 
 ## Bug 3
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+**Module / function:** cart.py -> import_products()
+**What we suspected and why:** The method counts each imported product, but the return statement adds one extra to the total.
+**What we did:** Imported two products and checked the value returned by import_products().
+**What we observed (the wrong result):** The function returned 3 after importing only 2 products.
+**What we expected instead:** It should return 2 because exactly two products were imported.
+**The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+**Author of this finding:** Aung Khant Ko
 
 ---
 
