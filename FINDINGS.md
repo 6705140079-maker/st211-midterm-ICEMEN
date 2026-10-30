@@ -14,7 +14,7 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Added two products priced 10 and 20, added both products to the cart, and ran the regression test for `cart.total()`.
 - **What we observed (the wrong result):** The cart total returned 10 instead of 30.
 - **What we expected instead:** The total should be 30 because both products, priced 10 and 20, are currently in the cart.
-- **The fix we made:** Not fixed yet. We first committed the failing regression test to demonstrate the original defect.
+- **The fix we made:** Changed `Cart.total()` so it iterates through every item in the cart instead of stopping before the final item. After the fix, the regression test passed and returned the expected total of 30.
 - **Author of this finding:** Aung Zay Oo
 
 ---
@@ -33,34 +33,34 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 
 ## Bug 3
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+- **Module / function:** `cart.py -> import_products()`
+- **What we suspected and why:** The method counts each imported product, but the return statement adds one extra to the total.
+- **What we did:** Imported two products and checked the value returned by `import_products()`.
+- **What we observed (the wrong result):** The function returned 3 after importing only 2 products.
+- **What we expected instead:** It should return 2 because exactly two products were imported.
+- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **Author of this finding:** Aung Khant Ko
 
 ---
 
 ## Bug 4
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+- **Module / function:** users.py -> login()
+- **What we suspected and why:** login() removes special characters from the password before comparing it with the stored password, so valid passwords containing symbols may not work correctly.
+- **What we did:** Registered a user with the password p@ss!123 and then attempted to log in using that exact password.
+- **What we observed (the wrong result):** Login returned False even though the exact registered password was supplied.
+- **What we expected instead:** Login should return True when the supplied password exactly matches the stored password, including special characters.
+- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **Author of this finding:** Thet Htoo San
 
 ---
 
 ## Bug 5
 
-- **Module / function:**
-- **What we suspected and why:**
-- **What we did:**
-- **What we observed (the wrong result):**
-- **What we expected instead:**
-- **The fix we made:**
-- **Author of this finding:**
+- **Module / function:** catalog.py -> search()
+- **What we suspected and why:** search() compares the keyword directly with the product title, so the comparison appears to be case-sensitive.
+- **What we did:** Added a product titled Python Testing and searched using the lowercase keyword `python`.
+- **What we observed (the wrong result):** The search returned an empty list `[]`.
+- **What we expected instead:** The search should return [1] because python should match Python Testing regardless of letter case.
+- **The fix we made:** Changed `search()` so both the keyword and product title are compared in lowercase. The lowercase search regression test passed after the fix.
+- **Author of this finding:** Nyan Moe Aung
