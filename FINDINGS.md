@@ -26,7 +26,7 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Created a new empty cart, called `checkout()`, and checked the order history.
 - **What we observed (the wrong result):** checkout() returned `[]` and history() became `[[]]`.
 - **What we expected instead:** checkout() should return None for an empty cart and the history should remain `[]` because no order was placed.
-- **The fix we made:** Not fixed yet. The failing regression test was committed first so the original defect is demonstrated.
+- **The fix we made:** Added an empty-cart check to `checkout()`. It now returns None without recording an order when the cart contains no items. The regression test passed after the fix.
 - **Author of this finding:** Thet Naing Tun
 
 ---
