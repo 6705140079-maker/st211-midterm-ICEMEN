@@ -207,3 +207,42 @@ def test_regression_search_is_case_insensitive():
     cat.add_product(1, "Python Testing", 30)
 
     assert cat.search("python") == [1]
+
+
+@pytest.mark.regression
+@pytest.mark.slow
+def test_large_order_processing():
+    """Author: Aung Zay Oo (6705140079-maker).
+
+    Regression:
+    This test checks two previously discovered bugs:
+    1. Cart.import_products() must return the exact number of imported products.
+    2. Cart.total() must include every item in the cart.
+
+    Slow:
+    This test processes 100,000 products and performs 100,000 cart additions,
+    making it significantly heavier than the normal smoke tests.
+
+    CI/CD:
+    Because this test performs a large amount of work, it belongs in the
+    scheduled nightly full test suite rather than the fast smoke test run
+    executed on every push.
+    """
+    cat = Catalog()
+    cart = Cart(cat)
+
+    products = [
+        (i, f"Book_{i}", 2)
+        for i in range(100_000)
+    ]
+
+    imported = cart.import_products(products)
+
+    for i in range(100_000):
+        cart.add(i)
+
+    calculated_total = cart.total()
+
+    assert imported == 100_000
+    assert calculated_total == 200_000
+
