@@ -62,5 +62,5 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Added a product titled Python Testing and searched using the lowercase keyword `python`.
 - **What we observed (the wrong result):** The search returned an empty list `[]`.
 - **What we expected instead:** The search should return [1] because python should match Python Testing regardless of letter case.
-- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **The fix we made:** Changed `search()` so both the keyword and product title are compared in lowercase. The lowercase search regression test passed after the fix.
 - **Author of this finding:** Nyan Moe Aung
