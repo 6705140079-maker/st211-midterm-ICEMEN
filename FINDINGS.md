@@ -38,7 +38,7 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Imported two products and checked the value returned by `import_products()`.
 - **What we observed (the wrong result):** The function returned 3 after importing only 2 products.
 - **What we expected instead:** It should return 2 because exactly two products were imported.
-- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **The fix we made:** Changed `import_products()` to return `count` instead of `count + 1`. After the change, importing two products correctly returned 2 and the regression test passed.
 - **Author of this finding:** Aung Khant Ko
 
 ---
@@ -50,7 +50,7 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Registered a user with the password p@ss!123 and then attempted to log in using that exact password.
 - **What we observed (the wrong result):** Login returned False even though the exact registered password was supplied.
 - **What we expected instead:** Login should return True when the supplied password exactly matches the stored password, including special characters.
-- **The fix we made:** Not fixed yet. The failing regression test was committed first to demonstrate the original defect.
+- **The fix we made:** Removed password sanitization from `login()` and compared the exact supplied password with the stored password. The special-character regression test passed after the fix.
 - **Author of this finding:** Thet Htoo San
 
 ---
