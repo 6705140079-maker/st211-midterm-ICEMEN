@@ -17,19 +17,19 @@ Automated Software Testing (192-211)
 
 This project tests and fixes an online bookstore application using Pytest. The test suite includes smoke, regression, and slow tests covering user accounts, catalogue operations, cart behaviour, checkout, bulk import, and search.
 
-The project also includes an audit of the supplied AI-generated tests and a GitHub Actions workflow for continuous integration.
+The project also includes a bug-hunt log, a report on testing strategy and scenarios, an audit of supplied AI-generated tests, a multi-marker bonus test, and GitHub Actions continuous integration.
 
 ## Project Structure
 
 ```text
 bookstore_app/       Application code
 tests/               Smoke, regression, slow, and bonus tests
-ai_review/           Supplied AI-generated tests for the Part D3 audit
+ai_review/           Supplied AI-generated tests for Part D3 audit
 worked_example/      Instructor-provided worked example
 templates/           Original documentation templates
 FINDINGS.md          Bug-hunt findings
-REPORT.md            Test-type, scenario, and team-reflection report
-AI_USAGE.md          AI usage declaration and supplied-test audit
+REPORT.md            Parts A/B and F report
+AI_USAGE.md          AI declaration and supplied-test audit
 .github/workflows/   GitHub Actions CI workflow
 pytest.ini           Pytest marker configuration
 requirements.txt     Python dependencies
@@ -47,7 +47,7 @@ macOS/Linux:
 source .venv/bin/activate
 ```
 
-Windows:
+Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
@@ -59,32 +59,32 @@ Install dependencies:
 python -m pip install -r requirements.txt
 ```
 
-## Running the Tests
+## Running Tests
 
-Run the full student test suite:
+Full student test suite:
 
 ```bash
 python -m pytest tests/ -v
 ```
 
-Run smoke tests:
+Smoke tests:
 
 ```bash
 python -m pytest -m smoke tests/test_bookstore.py -v
 ```
 
-Run regression tests:
+Regression tests:
 
 ```bash
 python -m pytest -m regression tests/test_bookstore.py -v
 ```
 
-Run slow tests:
+Slow tests:
 
 ```bash
 python -m pytest -m slow tests/test_bookstore.py -v --durations=0
 ```
 
-## Bonus Test
+## Bonus
 
-The project includes `test_large_order_processing()`, which carries both the `regression` and `slow` markers. It checks previously discovered bulk-processing defects while processing a large workload and is intended for the nightly full CI test suite.
+`test_large_order_processing()` carries both `regression` and `slow` markers. It verifies previously discovered bulk-processing defects while performing a large workload, so it belongs in the scheduled/nightly full CI test suite rather than the fast smoke run on every push.

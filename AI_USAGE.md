@@ -1,192 +1,339 @@
 # AI Usage Declaration and Audit
 
-**Group:** _____________________  **Members:** _____________________________
+**Group:** ICEMEN  
+**Members:** Aung Zay Oo (6705140079), Thet Naing Tun (6705140062), Aung Khant Ko (6705140063), Thet Htoo San (6705140080), Nyan Moe Aung (6705140058)
 
-**Part D3 of the midterm — 20 marks.** Part 1 is required but carries no marks;
-its absence is an academic-honesty matter. Part 2 is worth 16 (2 per test).
-Parts 3 and 4 together are worth 4.
+**Part D3 of the midterm — 20 marks.**
 
-Before you submit, check all eight boxes:
+Before submission:
 
-- [ ] Part 1 declaration complete, or the "no AI used" statement written
-- [ ] All eight tests appear in the summary table with a verdict
-- [ ] All eight have **two** pasted evidence runs (shipped code, and your fixed code)
-- [ ] Part 3 coverage table filled in against `FINDINGS.md`
-- [ ] Part 4 verdict written, under 400 words
-- [ ] Every audit entry names the member who did it
-- [ ] No claim made that you cannot demonstrate from pasted output
-- [ ] File committed as `AI_USAGE.md` in the repository root
+- [x] Part 1 declaration complete
+- [x] All eight tests appear in the summary table with a verdict
+- [x] All eight have shipped-code and fixed-code evidence
+- [x] Part 3 coverage table is filled in against `FINDINGS.md`
+- [x] Part 4 verdict is under 400 words
+- [x] Every audit entry names the member responsible
+- [x] Claims are tied to observed pytest results
+- [x] File is named `AI_USAGE.md` in the repository root
 
 ---
 
-## Part 1 — AI usage declaration (required, unmarked)
-
-Every AI tool any member used anywhere in this project. Using AI is allowed.
-Not declaring it is not.
+## Part 1 — AI usage declaration
 
 | Tool | What we used it for | Where in the project | How we checked it before relying on it |
 |---|---|---|---|
-| *example:* Copilot | completing test boilerplate | `tests/test_bookstore.py` | ran each test against the shipped code and confirmed it failed for the reason we expected |
-| | | | |
-| | | | |
+| ChatGPT | Helped with test ideas, debugging, Git workflow, candidate fixes, documentation structure, bonus-test design, CI guidance, and checking the supplied AI-test audit | `tests/test_bookstore.py`, bug investigation/fixes, `FINDINGS.md`, `REPORT.md`, `AI_USAGE.md`, and CI workflow guidance | Suggestions were reviewed against the supplied project behavior and validated with pytest. Regression tests were checked against buggy behavior and the fixed application before conclusions were recorded. |
 
-If you kept prompts worth showing, add them in an appendix at the end of this
-file. Do not paste whole conversations.
-
-If no AI tools were used anywhere, write this instead of the table:
-
-> No AI tools were used in this project. All tests, bug investigation and fixes
-> were produced by the group.
+The group used AI as an assistant, not as a substitute for testing. Final claims in this file are based on observed pytest behavior.
 
 ---
 
-## Part 2 — Audit of the supplied test set (16 marks)
+## Part 2 — Audit of the supplied test set
 
-`ai_review/test_ai_suggested.py` contains eight tests presented as a finished
-AI bug hunt for this bookstore. They are confident and they are not all
-correct. Your job is to establish, for each one, what it actually does.
+The supplied file in this repository is `ai_review/test_ai_generated.py` and contains eight tests. We compared the same tests against the shipped buggy behavior and the final fixed application.
 
-### How to classify a test
+### Classification rules
 
-A single test run cannot tell you. "Fails against the buggy code" does **not**
-mean the test found a bug — a test demanding behaviour the application was
-never meant to have also fails. You need two runs, and the pair of results is
-what identifies the category:
+| Shipped Code | Fixed Code | Verdict |
+|---|---|---|
+| FAIL | PASS | **Genuine detection** |
+| PASS | PASS | **Detects nothing** |
+| PASS | FAIL | **Locks in the bug** |
+| FAIL | FAIL | **Invented requirement** |
 
-| Shipped Code | Fixed Code | What This Tells You | Verdict |
-|---|---|---|---|
-| ❌ FAIL | ✅ PASS | The test failed when the bug existed and passed after the bug was fixed. It successfully detected a real defect. | **Genuine detection** |
-| ✅ PASS | ✅ PASS | The test passed before and after the fix. It never noticed the bug, so it provides false confidence. | **Detects nothing** |
-| ✅ PASS | ❌ FAIL | The test expected the buggy behaviour. After the bug was fixed, the test broke. | **Locks in the bug** |
-| ❌ FAIL | ❌ FAIL | The test failed both before and after the fix. It is testing something unrelated to the bug, or a requirement that does not exist. | **Invented requirement** |
-
-The third row is the one to think hardest about. A test that locks in a bug is
-worse than one that detects nothing: a team that trusts its suite will see the
-test go red after a correct fix, conclude the fix was wrong, and revert it. The
-bug then has a test defending it.
-
-### How to produce the evidence
-
-Run each test twice — once with the application as you received it, once with
-your fixes in place. If you have already fixed the code, you can get back to
-the shipped state with git:
-
-```bash
-# your fixed code
-pytest ai_review/test_ai_suggested.py -v | tee /tmp/fixed.txt
-
-# the code as it was shipped (replace <sha> with your first commit)
-git stash
-git checkout <sha> -- bookstore_app/
-pytest ai_review/test_ai_suggested.py -v | tee /tmp/shipped.txt
-git checkout HEAD -- bookstore_app/
-git stash pop
-```
-
-Paste the real output. Not a screenshot, not a retyped summary — the text.
-
-### Marks, per test
-
-| | marks |
-|---|---|
-| Correct verdict | 1 |
-| Both evidence runs pasted, showing the outcome you claim | 1 |
-
-**A claim you cannot demonstrate costs a mark.** If you assert a test is broken
-and the output does not support it, you lose more than you would have gained by
-leaving the row blank. Check before you write.
-
-### Summary table — fill this in first
+### Summary table
 
 | # | Test | What it claims to catch | Shipped | Fixed | Verdict | Auditor |
 |---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
-| 4 | | | | | | |
-| 5 | | | | | | |
-| 6 | | | | | | |
-| 7 | | | | | | |
-| 8 | | | | | | |
+| 1 | `test_cart_total_sums_items` | Incorrect cart total | FAIL | PASS | **Genuine detection** | Aung Zay Oo |
+| 2 | `test_login_rejects_wrong_password` | Wrong password is accepted | PASS | PASS | **Detects nothing** | Aung Zay Oo |
+| 3 | `test_search_finds_exact_title` | Search cannot find a product | PASS | PASS | **Detects nothing** | Thet Naing Tun |
+| 4 | `test_import_returns_count` | Bulk import returns the wrong count | FAIL | PASS | **Genuine detection** | Thet Naing Tun |
+| 5 | `test_register_duplicate_returns_false` | Duplicate registration is accepted | PASS | PASS | **Detects nothing** | Aung Khant Ko |
+| 6 | `test_checkout_empty_returns_none` | Empty checkout returns the wrong value | FAIL | PASS | **Genuine detection** | Aung Khant Ko |
+| 7 | `test_add_to_cart_returns_true_for_known_product` | A known product cannot be added to the cart | PASS | PASS | **Detects nothing** | Thet Htoo San |
+| 8 | `test_search_is_limited_to_ten_results` | Search should return at most ten results | FAIL | FAIL | **Invented requirement** | Nyan Moe Aung |
 
-### Detail entries
+### Evidence runs
 
-Copy the block below once for each of the eight tests. Do not paste the test
-code — it is in the repository and identical for everyone. Reference it by name
-and line instead.
+For the shipped state, the full supplied set produced these observed results:
+
+```text
+$ python -m pytest ai_review/test_ai_generated.py -v
+ai_review/test_ai_generated.py::test_cart_total_sums_items FAILED
+ai_review/test_ai_generated.py::test_login_rejects_wrong_password PASSED
+ai_review/test_ai_generated.py::test_search_finds_exact_title PASSED
+ai_review/test_ai_generated.py::test_import_returns_count FAILED
+ai_review/test_ai_generated.py::test_register_duplicate_returns_false PASSED
+ai_review/test_ai_generated.py::test_checkout_empty_returns_none FAILED
+ai_review/test_ai_generated.py::test_add_to_cart_returns_true_for_known_product PASSED
+ai_review/test_ai_generated.py::test_search_is_limited_to_ten_results FAILED
+========================= 4 failed, 4 passed ==========================
+```
+
+Relevant shipped-state failure evidence:
+
+```text
+test_cart_total_sums_items:
+E       assert 10 == 30
+
+test_import_returns_count:
+E       AssertionError: assert 3 == 2
+
+test_checkout_empty_returns_none:
+E       assert [] is None
+
+test_search_is_limited_to_ten_results:
+E       AssertionError: assert 20 <= 10
+```
+
+For the final fixed state, the full supplied set produced these observed results:
+
+```text
+$ python -m pytest ai_review/test_ai_generated.py -v
+ai_review/test_ai_generated.py::test_cart_total_sums_items PASSED
+ai_review/test_ai_generated.py::test_login_rejects_wrong_password PASSED
+ai_review/test_ai_generated.py::test_search_finds_exact_title PASSED
+ai_review/test_ai_generated.py::test_import_returns_count PASSED
+ai_review/test_ai_generated.py::test_register_duplicate_returns_false PASSED
+ai_review/test_ai_generated.py::test_checkout_empty_returns_none PASSED
+ai_review/test_ai_generated.py::test_add_to_cart_returns_true_for_known_product PASSED
+ai_review/test_ai_generated.py::test_search_is_limited_to_ten_results FAILED
+========================= 1 failed, 7 passed ==========================
+```
+
+Relevant fixed-state failure evidence:
+
+```text
+test_search_is_limited_to_ten_results:
+E       AssertionError: assert 20 <= 10
+```
 
 ---
 
-#### Test: `test_<function_name>`  (`ai_review/test_ai_suggested.py:<line>`)
+### Test 1 — `test_cart_total_sums_items` (`ai_review/test_ai_generated.py:12`)
 
-**Audited by:** _______________
+**Audited by:** Aung Zay Oo
 
-**1. What it claims to catch.** One or two sentences, in your own words, from
-its name and docstring.
+**1. What it claims to catch:** It claims that `Cart.total()` should sum the prices of every item currently in the cart.
 
-**2. Evidence — against the shipped code**
-
-```text
-<paste the pytest output for this test>
-```
-
-**3. Evidence — against your fixed code**
+**2. Evidence — shipped code**
 
 ```text
-<paste the pytest output for this test>
+ai_review/test_ai_generated.py::test_cart_total_sums_items FAILED
+E       assert 10 == 30
 ```
 
-**4. What that pair proves.** Name the row of the classification table you
-landed on and say why. If the verdict is "detects nothing" or "locks in the
-bug", identify the specific weakness — which assertion, and what it would have
-had to say instead. If it is "invented requirement", say where in the
-application's behaviour you established that the requirement does not exist.
+**3. Evidence — fixed code**
 
-**5. Verdict** (tick one)
+```text
+ai_review/test_ai_generated.py::test_cart_total_sums_items PASSED
+```
 
-- [ ] Genuine detection — FAIL then PASS
-- [ ] Detects nothing — PASS then PASS
-- [ ] Locks in the bug — PASS then FAIL
-- [ ] Invented requirement — FAIL then FAIL
+**4. What the pair proves:** This is a **genuine detection**. It fails when the shipped `Cart.total()` omits the final item and passes after `total()` is fixed to include every item.
+
+**5. Verdict:** [x] Genuine detection — FAIL then PASS
 
 ---
 
-## Part 3 — Coverage against your own bug hunt
+### Test 2 — `test_login_rejects_wrong_password` (`ai_review/test_ai_generated.py:19`)
 
-One row per bug you recorded in `FINDINGS.md`, plus a row for any bug the
-supplied set caught that you had not found yourself.
+**Audited by:** Aung Zay Oo
 
-| Bug (your description) | We found it | The supplied set catches it | Which test, and how you established that |
+**1. What it claims to catch:** It checks that login rejects an ordinary incorrect password.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_login_rejects_wrong_password PASSED
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_login_rejects_wrong_password PASSED
+```
+
+**4. What the pair proves:** This test **detects nothing** about the planted login bug. The shipped login bug concerns special-character handling, but this test only uses simple alphanumeric passwords. A useful test for that defect must register a password such as `p@ss!123` and verify that the exact password works while the cleaned version does not.
+
+**5. Verdict:** [x] Detects nothing — PASS then PASS
+
+---
+
+### Test 3 — `test_search_finds_exact_title` (`ai_review/test_ai_generated.py:25`)
+
+**Audited by:** Thet Naing Tun
+
+**1. What it claims to catch:** It checks that catalog search can find a product by its title.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_search_finds_exact_title PASSED
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_search_finds_exact_title PASSED
+```
+
+**4. What the pair proves:** This test **detects nothing** about the case-sensitivity defect because it searches for `Python Testing` with exactly the same capitalization as the stored title. To expose the bug it would need to search with a different case, for example `python`.
+
+**5. Verdict:** [x] Detects nothing — PASS then PASS
+
+---
+
+### Test 4 — `test_import_returns_count` (`ai_review/test_ai_generated.py:31`)
+
+**Audited by:** Thet Naing Tun
+
+**1. What it claims to catch:** It checks that `import_products()` returns the exact number of products imported.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_import_returns_count FAILED
+E       AssertionError: assert 3 == 2
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_import_returns_count PASSED
+```
+
+**4. What the pair proves:** This is a **genuine detection**. The shipped implementation incorrectly returned `count + 1`, and the test passed once the method returned the true count.
+
+**5. Verdict:** [x] Genuine detection — FAIL then PASS
+
+---
+
+### Test 5 — `test_register_duplicate_returns_false` (`ai_review/test_ai_generated.py:37`)
+
+**Audited by:** Aung Khant Ko
+
+**1. What it claims to catch:** It checks that an already-used username cannot be registered again.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_register_duplicate_returns_false PASSED
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_register_duplicate_returns_false PASSED
+```
+
+**4. What the pair proves:** This test **detects nothing** about the planted registration bug. Duplicate rejection already worked in the shipped code; the actual defect was that empty usernames or passwords were accepted. The test would need empty credentials to detect that bug.
+
+**5. Verdict:** [x] Detects nothing — PASS then PASS
+
+---
+
+### Test 6 — `test_checkout_empty_returns_none` (`ai_review/test_ai_generated.py:43`)
+
+**Audited by:** Aung Khant Ko
+
+**1. What it claims to catch:** It checks that checking out an empty cart returns `None`.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_checkout_empty_returns_none FAILED
+E       assert [] is None
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_checkout_empty_returns_none PASSED
+```
+
+**4. What the pair proves:** This is a **genuine detection**. The shipped implementation returned an empty list and recorded an empty order, while the corrected implementation returns `None` without creating an order.
+
+**5. Verdict:** [x] Genuine detection — FAIL then PASS
+
+---
+
+### Test 7 — `test_add_to_cart_returns_true_for_known_product` (`ai_review/test_ai_generated.py:48`)
+
+**Audited by:** Thet Htoo San
+
+**1. What it claims to catch:** It checks that adding a product that exists in the catalog succeeds.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_add_to_cart_returns_true_for_known_product PASSED
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_add_to_cart_returns_true_for_known_product PASSED
+```
+
+**4. What the pair proves:** This test **detects nothing** about any planted defect because `Cart.add()` already behaved correctly in the shipped application. It is a reasonable smoke-style check, but it is not evidence of a planted bug.
+
+**5. Verdict:** [x] Detects nothing — PASS then PASS
+
+---
+
+### Test 8 — `test_search_is_limited_to_ten_results` (`ai_review/test_ai_generated.py:55`)
+
+**Audited by:** Nyan Moe Aung
+
+**1. What it claims to catch:** It assumes catalog search should return no more than ten matching results.
+
+**2. Evidence — shipped code**
+
+```text
+ai_review/test_ai_generated.py::test_search_is_limited_to_ten_results FAILED
+E       AssertionError: assert 20 <= 10
+```
+
+**3. Evidence — fixed code**
+
+```text
+ai_review/test_ai_generated.py::test_search_is_limited_to_ten_results FAILED
+E       AssertionError: assert 20 <= 10
+```
+
+**4. What the pair proves:** This is an **invented requirement**. Neither the catalog API nor the project requirements define a ten-result limit. The search method is intended to return the matching product IDs, so returning all 20 matching products is valid.
+
+**5. Verdict:** [x] Invented requirement — FAIL then FAIL
+
+---
+
+## Part 3 — Coverage against our own bug hunt
+
+| Bug (our description) | We found it | The supplied set catches it | Which test, and how we established that |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| `Cart.total()` omits the final cart item | Yes | Yes | `test_cart_total_sums_items` failed on shipped code with `10 != 30` and passed after the fix. |
+| `Cart.checkout()` accepts an empty cart and records an empty order | Yes | Yes | `test_checkout_empty_returns_none` failed with `[] is None` and passed after the empty-cart fix. |
+| `Cart.import_products()` returns one too many | Yes | Yes | `test_import_returns_count` failed with `3 != 2` and passed after returning `count`. |
+| `Users.login()` mishandles passwords containing special characters | Yes | No | `test_login_rejects_wrong_password` passed in both states because it never uses a password containing symbols. |
+| `Catalog.search()` is case-sensitive | Yes | No | `test_search_finds_exact_title` passed in both states because it uses identical capitalization instead of testing different case. |
 
-This is a factual cross-reference, not an opinion. Every "yes" in the third
-column must point at a test you classified as a genuine detection in Part 2.
-
----
-
-## Part 4 — Verdict (4 marks, 400 words maximum)
-
-Four questions. Be specific and cite your own table.
-
-1. **Which failure mode was most common** in the supplied set? Give the count
-   from your summary table.
-2. **Why is a test that passes against buggy code more dangerous than one that
-   crashes?** A crashing test gets attention. Say what happens to the other
-   kind.
-3. **Did the supplied set catch anything you had missed?** If yes, what, and
-   what would have led you to it. If no, say so — that is a legitimate answer
-   and does not cost marks.
-4. **What will you check before trusting a generated test in future?** Name
-   checks you actually performed in this exercise, not general principles.
-
-Answers that could have been written about any project score half marks at
-best.
+The separate empty-credentials registration defect was also found by our regression suite, but it was not added as a sixth `FINDINGS.md` entry because the assignment limits `FINDINGS.md` to five entries. The supplied AI set does not detect that defect either; its registration test only checks duplicate usernames.
 
 ---
 
-## Appendix (optional)
+## Part 4 — Verdict
 
-Prompts, or notes on AI use, that support Part 1.
+The most common failure mode in the supplied AI-generated set was **detects nothing**, which occurred in **4 of the 8 tests**. Three tests were genuine detections: cart total, bulk-import count, and empty checkout. One test invented a requirement by assuming catalog search must be limited to ten results.
+
+A test that passes against buggy code can be more dangerous than a test that crashes because a passing test creates false confidence. In this project, the wrong-password, exact-title search, duplicate-registration, and add-to-cart tests all passed on the shipped application even though planted bugs still existed elsewhere in the same areas. A crashing or failing test attracts attention, while a weak passing test can make the team believe the relevant behavior has already been validated.
+
+The supplied set did not reveal a planted defect that our own bug hunt had missed. Instead, our regression tests covered additional cases that the supplied set failed to exercise, especially empty registration credentials, special-character passwords, and case-insensitive search.
+
+Before trusting a generated test in future, we will run it against both the known-buggy and fixed versions, inspect the exact assertion and input data, confirm that the asserted behavior exists in the requirements or API behavior, and check whether the test actually exercises the edge case associated with the suspected defect. This audit showed that a plausible test name is not enough; observed before/after behavior is the evidence that matters.
+
+---
+
+## Appendix
+
+ChatGPT was used as declared in Part 1. The group reviewed the generated suggestions and relied on pytest results and the project requirements before accepting conclusions.
