@@ -6,11 +6,15 @@ class Users:
         self.users = {}   # username -> password
 
     def register(self, username, password):
-        """Register a new user. Returns True on success, False if taken."""
-        if username in self.users:
-            return False
-        self.users[username] = password
-        return True
+     """Register a new user. Returns True on success, False if taken."""
+     if not username or not password:
+          return False
+
+     if username in self.users:
+        return False
+
+     self.users[username] = password
+     return True
 
     def login(self, username, password):
         """Return True if the username exists and the password matches."""
