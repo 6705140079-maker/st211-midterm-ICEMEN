@@ -14,7 +14,7 @@ Fill in one entry per bug you find, AS YOU FIND IT (before doing the AI comparis
 - **What we did:** Added two products priced 10 and 20, added both products to the cart, and ran the regression test for `cart.total()`.
 - **What we observed (the wrong result):** The cart total returned 10 instead of 30.
 - **What we expected instead:** The total should be 30 because both products, priced 10 and 20, are currently in the cart.
-- **The fix we made:** Not fixed yet. We first committed the failing regression test to demonstrate the original defect.
+- - **The fix we made:** Changed `Cart.total()` so it iterates through every item in the cart instead of stopping before the final item. After the fix, the regression test passed and returned the expected total of 30.
 - **Author of this finding:** Aung Zay Oo
 
 ---
