@@ -29,8 +29,10 @@ class Cart:
         return total
 
     def checkout(self):
-        """Place an order for the cart contents. Returns the order list, or
-        None if the cart is empty."""
+        """Place an order for the cart contents. Returns the order list, or None if the cart is empty."""
+        if not self.items:
+            return None
+            
         order = list(self.items)
         self.orders.append(order)
         self.items = []
@@ -48,4 +50,4 @@ class Cart:
             self.catalog.add_product(pid, title, price)
             count += 1
             time.sleep(0)
-        return count + 1
+        return count 
